@@ -2,4 +2,5 @@
 // Em desenvolvimento, o proxy (proxy.conf.json) redireciona /api para a API e evita o problema de CORS.
 export const environment = {
   apiUrl: '',
+  demo: false,
 };

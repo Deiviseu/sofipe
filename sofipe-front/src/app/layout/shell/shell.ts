@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-shell',
@@ -26,6 +27,9 @@ import { AuthService } from '../../core/services/auth.service';
         </div>
       </nav>
       <main class="content">
+        @if (demo) {
+          <p class="demo">Modo demonstração: dados fictícios, sem conexão com a API.</p>
+        }
         <router-outlet />
       </main>
     </div>
@@ -49,6 +53,7 @@ import { AuthService } from '../../core/services/auth.service';
     }
     .user { margin-top: auto; display: flex; flex-direction: column; gap: 4px; font-size: 14px; }
     .user .btn { margin-top: 12px; }
+    .demo { margin: 0 0 24px; padding: 10px 14px; border-radius: var(--radius); background: rgba(0,99,138,.2); border: 1px solid var(--blue); font-size: 13px; }
     .content { flex: 999 1 560px; min-width: 0; padding: 40px; }
     @media (max-width: 800px) {
       .sidebar { gap: 16px; }
@@ -59,4 +64,5 @@ import { AuthService } from '../../core/services/auth.service';
 })
 export class Shell {
   protected auth = inject(AuthService);
+  protected demo = environment.demo;
 }

@@ -3,6 +3,7 @@ import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { apiErrorMessage } from '../../core/interceptors/auth.interceptor';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -15,8 +16,9 @@ export class LoginPage {
   private auth = inject(AuthService);
   private router = inject(Router);
 
+  readonly demo = environment.demo;
   readonly loading = signal(false);
-  readonly error = signal<string | null>(null);
+  readonly error = signal<string | null>(this.auth.logoutReason());
 
   readonly form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],

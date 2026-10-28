@@ -11,7 +11,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authReq).pipe(
     catchError((err: HttpErrorResponse) => {
-      if (err.status === 401 && !req.url.endsWith('/auth/login')) auth.logout();
+      if (err.status === 401 && !req.url.endsWith('/auth/login')) {
+        const msg = err.error?.error?.message ?? err.error?.message ?? 'não autorizado';
+        console.error('[401]', req.method, req.url, err.error);
+        auth.logout(`A API recusou ${req.method} ${req.url.replace(/^https?:\/\/[^/]+/, '')} (401: ${msg}).`);
+      }
       return throwError(() => err);
     }),
   );
@@ -19,6 +23,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
 /** Extrai a mensagem do envelope de erro da API. */
 export function apiErrorMessage(err: unknown, fallback = 'Algo deu errado. Tente de novo.'): string {
+  if (err instanceof Error && !(err instanceof HttpErrorResponse)) return err.message;
   if (err instanceof HttpErrorResponse) {
     if (err.status === 0) return 'Não foi possível falar com a API (offline ou bloqueada por CORS).';
     return err.error?.error?.message ?? err.error?.message ?? fallback;

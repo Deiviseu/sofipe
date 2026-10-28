@@ -13,12 +13,20 @@ export class AuthService {
   private router = inject(Router);
 
   readonly session = signal<LoginResponse | null>(this.restore());
-  readonly isLoggedIn = computed(() => this.session() !== null);
+  readonly isLoggedIn = computed(() => !!this.session()?.token);
+  /** Motivo do último logout forçado, mostrado na tela de login. */
+  readonly logoutReason = signal<string | null>(null);
 
   login(body: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<ApiResponse<LoginResponse>>(API.login, body).pipe(
-      map((res) => res.data),
+    return this.http.post<ApiResponse<LoginResponse> | LoginResponse>(API.login, body).pipe(
+      // Aceita a resposta com envelope ({ data: {...} }) ou direta ({ token, ... }).
+      map((res) => ((res as ApiResponse<LoginResponse>)?.data ?? res) as LoginResponse),
       tap((data) => {
+        if (!data?.token) {
+          console.error('[login] resposta sem token:', data);
+          throw new Error('A API respondeu ao login, mas não devolveu um token.');
+        }
+        this.logoutReason.set(null);
         this.session.set(data);
         try {
           sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -27,7 +35,8 @@ export class AuthService {
     );
   }
 
-  logout(): void {
+  logout(reason: string | null = null): void {
+    this.logoutReason.set(reason);
     this.session.set(null);
     try {
       sessionStorage.removeItem(STORAGE_KEY);

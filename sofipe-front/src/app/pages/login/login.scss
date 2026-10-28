@@ -110,3 +110,12 @@ form {
     font-size: 32px;
   }
 }
+
+.info-demo {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  background: rgba(0, 99, 138, 0.2);
+  border: 1px solid var(--blue);
+  font-size: 13px;
+}

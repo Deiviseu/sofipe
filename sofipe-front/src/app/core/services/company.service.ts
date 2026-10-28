@@ -9,14 +9,16 @@ export class CompanyService {
   private http = inject(HttpClient);
 
   list(): Observable<Company[]> {
-    return this.http.get<ApiResponse<Company[]>>(API.companyList).pipe(map((r) => r.data ?? []));
+    return this.http
+      .get<ApiResponse<Company[]> | Company[]>(API.companyList)
+      .pipe(map((r) => (Array.isArray(r) ? r : (r?.data ?? []))));
   }
 
   register(body: CompanyRequest): Observable<Company> {
-    return this.http.post<ApiResponse<Company>>(API.companyRegister, body).pipe(map((r) => r.data));
+    return this.http.post<ApiResponse<Company>>(API.companyRegister, body).pipe(map((r) => ((r as any)?.data ?? r) as Company));
   }
 
   update(id: number, body: CompanyRequest): Observable<Company> {
-    return this.http.put<ApiResponse<Company>>(API.companyUpdate(id), body).pipe(map((r) => r.data));
+    return this.http.put<ApiResponse<Company>>(API.companyUpdate(id), body).pipe(map((r) => ((r as any)?.data ?? r) as Company));
   }
 }

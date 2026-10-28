@@ -3,6 +3,8 @@ import { Injectable, inject, signal } from '@angular/core';
 import { Observable, map, tap } from 'rxjs';
 import { API } from '../api-routes';
 import { ApiResponse, Company, IaAnalysis, StoredAnalysis } from '../models/api.models';
+import { environment } from '../../../environments/environment';
+import { DEMO_ANALYSES } from '../demo/demo.interceptor';
 
 const STORAGE_KEY = 'sofipe.analyses';
 
@@ -57,10 +59,12 @@ export class IaService {
   }
 
   private restore(): Record<number, StoredAnalysis> {
+    const fallback = environment.demo ? { ...DEMO_ANALYSES } : {};
     try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}');
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : fallback;
     } catch {
-      return {};
+      return fallback;
     }
   }
 
