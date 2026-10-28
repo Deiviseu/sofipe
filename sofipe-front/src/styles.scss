@@ -1,0 +1,186 @@
+/* Identidade visual Sofipe (sofipe.com.br) */
+:root {
+  --bg: #131619;
+  --surface: #161a1d;
+  --card: #242b30;
+  --line: #3a4249;
+  --text: #ffffff;
+  --text-2: #c4c4c4;
+  --muted: #a3a3a3;
+  --accent: #ffbf00;
+  --accent-hover: #ffd45c;
+  --on-accent: #131619;
+  --blue: #00638a;
+  --danger: #e5383b;
+  --radius: 5px;
+  --radius-lg: 8px;
+  --font-title: 'Open Sans', system-ui, sans-serif;
+  --font-body: 'Roboto', system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-title);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+}
+h1 {
+  font-size: 32px;
+}
+h2 {
+  font-size: 18px;
+}
+
+a {
+  color: var(--accent);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+/* Botões */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 24px;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  font-family: var(--font-title);
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--on-accent);
+  &:hover:not(:disabled) {
+    background: var(--accent-hover);
+  }
+}
+.btn-outline {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--line);
+  &:hover:not(:disabled) {
+    border-color: var(--accent);
+  }
+}
+.btn-blue {
+  background: var(--blue);
+  color: #fff;
+}
+
+/* Formulários */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-2);
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+    padding: 0 12px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--text);
+    font: 15px var(--font-body);
+    &:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+  }
+  textarea {
+    padding: 12px;
+    resize: vertical;
+  }
+  .hint-error {
+    color: #ff8a8c;
+    font-size: 12px;
+  }
+}
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+.panel {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.alert {
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  background: rgba(229, 56, 59, 0.15);
+  border: 1px solid var(--danger);
+  color: #ffd0d1;
+  font-size: 14px;
+}
+
+/* Badges de prioridade */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: var(--radius);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  &.ALTA {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+  &.MEDIA {
+    background: var(--blue);
+    color: #fff;
+  }
+  &.BAIXA {
+    background: var(--line);
+    color: #fff;
+  }
+  &.NONE {
+    background: transparent;
+    border: 1px dashed var(--line);
+    color: var(--muted);
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}

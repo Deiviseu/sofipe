@@ -1,0 +1,127 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  p {
+    margin: 6px 0 0;
+  }
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+.stat {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  strong {
+    font-family: var(--font-title);
+    font-size: 32px;
+  }
+  .hl {
+    color: var(--accent);
+  }
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pill {
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text);
+  font: 14px var(--font-body);
+  cursor: pointer;
+  &.on {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+    font-weight: 600;
+  }
+}
+.search {
+  flex: 1 1 220px;
+  input {
+    width: 100%;
+    min-height: 40px;
+    padding: 0 14px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--text);
+    font: 14px var(--font-body);
+  }
+}
+
+.retry {
+  margin-left: 12px;
+  min-height: 32px;
+  padding: 0 12px;
+}
+
+.table-box {
+  overflow-x: auto;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+}
+table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+th {
+  text-align: left;
+  padding: 14px 20px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+td {
+  padding: 16px 20px;
+  border-top: 1px solid var(--card);
+  vertical-align: top;
+}
+.name {
+  color: var(--text);
+  font-weight: 500;
+  text-decoration: none;
+  &:hover {
+    color: var(--accent);
+  }
+}
+.sub {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 4px;
+}
+.dim {
+  color: var(--text-2);
+}
+.score {
+  font-weight: 500;
+}
+.empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 40px;
+}

@@ -1,0 +1,63 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1100px;
+}
+header p {
+  margin: 6px 0 0;
+}
+
+.info {
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  background: rgba(0, 99, 138, 0.2);
+  border: 1px solid var(--blue);
+  font-size: 14px;
+}
+
+.cnpj {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px;
+  .grow {
+    flex: 1 1 280px;
+    font-size: 14px;
+    color: var(--text);
+    input {
+      background: var(--surface);
+      min-height: 48px;
+      font-size: 16px;
+    }
+  }
+  .btn {
+    min-height: 48px;
+  }
+  .accent {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  h2:not(:first-child) {
+    margin-top: 8px;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+}

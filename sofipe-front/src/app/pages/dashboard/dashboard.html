@@ -1,0 +1,93 @@
+<div class="page">
+  <header class="head">
+    <div>
+      <h1>Painel de leads</h1>
+      <p class="muted">Empresas analisadas pelo agente, ordenadas por prioridade.</p>
+    </div>
+    <a routerLink="/empresas/nova" class="btn btn-primary">+ Nova empresa</a>
+  </header>
+
+  <div class="stats">
+    <div class="card stat"><span class="muted">Empresas</span><strong>{{ stats().total }}</strong></div>
+    <div class="card stat"><span class="muted">Prioridade alta</span><strong class="hl">{{ stats().alta }}</strong></div>
+    <div class="card stat"><span class="muted">Prioridade média</span><strong>{{ stats().media }}</strong></div>
+    <div class="card stat"><span class="muted">Sem análise</span><strong>{{ stats().pendentes }}</strong></div>
+  </div>
+
+  <div class="toolbar" role="group" aria-label="Filtrar por prioridade">
+    @for (f of filters; track f.value) {
+      <button
+        type="button"
+        class="pill"
+        [class.on]="filter() === f.value"
+        [attr.aria-pressed]="filter() === f.value"
+        (click)="filter.set(f.value)"
+      >
+        {{ f.label }}
+      </button>
+    }
+    <label class="search">
+      <span class="sr-only">Buscar empresa ou CNPJ</span>
+      <input
+        type="search"
+        placeholder="Buscar empresa ou CNPJ"
+        [value]="search()"
+        (input)="search.set($any($event.target).value)"
+      />
+    </label>
+  </div>
+
+  @if (error()) {
+    <div class="alert" role="alert">
+      {{ error() }} <button type="button" class="btn btn-outline retry" (click)="load()">Tentar de novo</button>
+    </div>
+  }
+
+  <div class="table-box">
+    <table>
+      <thead>
+        <tr>
+          <th>Empresa</th>
+          <th>Setor (CNAE)</th>
+          <th>Porte</th>
+          <th>Prioridade</th>
+          <th>Score</th>
+          <th>Próximo passo</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (loading()) {
+          <tr><td colspan="6" class="empty">Carregando…</td></tr>
+        } @else {
+          @for (r of visible(); track r.company.companyId) {
+            <tr>
+              <td>
+                <a [routerLink]="['/empresas', r.company.companyId, 'analise']" class="name">
+                  {{ r.company.tradeName || r.company.legalName }}
+                </a>
+                <div class="sub">{{ r.company.taxId }}</div>
+              </td>
+              <td class="dim">{{ r.company.industryCodeDescription }}</td>
+              <td class="dim">{{ r.company.companySize }}</td>
+              <td>
+                <span class="badge" [class]="r.analysis?.priorityScore ?? 'NONE'">
+                  {{ label(r.analysis?.priorityScore) }}
+                </span>
+              </td>
+              <td class="score">{{ r.analysis?.numericScore ?? '—' }}</td>
+              <td class="dim">
+                @if (r.analysis) {
+                  {{ r.analysis.nextStep }}
+                } @else {
+                  <a [routerLink]="['/empresas', r.company.companyId, 'analise']">Qualificar agora</a>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="6" class="empty">Nenhuma empresa encontrada.</td></tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

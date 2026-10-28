@@ -1,0 +1,62 @@
+<div class="login">
+  <section class="hero">
+    <div class="brand">
+      <svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true">
+        <circle cx="12" cy="24" r="8" fill="#00638A" />
+        <circle cx="24" cy="10" r="6" fill="#FFBF00" />
+      </svg>
+      <span class="name">Sofipe</span>
+      <span class="tag">Prospect IA</span>
+    </div>
+
+    <div class="pitch">
+      <h1>Mais leads certos.<br />Menos tempo perdido.</h1>
+      <p>
+        Agente de IA que analisa empresas, classifica a prioridade de cada lead e sugere os seguros
+        corporativos e as próximas perguntas para o time comercial.
+      </p>
+      <div class="chips">
+        <span>Coleta por CNPJ</span>
+        <span>Score ALTA · MÉDIA · BAIXA</span>
+        <span>Integração CRM</span>
+      </div>
+    </div>
+
+    <p class="muted small">Mais proteção, mais economia, mais tranquilidade.</p>
+  </section>
+
+  <section class="form-side">
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div>
+        <h2 class="title">Entrar</h2>
+        <p class="muted">Acesso restrito à equipe Sofipe.</p>
+      </div>
+
+      @if (error()) {
+        <div class="alert" role="alert">{{ error() }}</div>
+      }
+
+      <label class="field">
+        E-mail
+        <input type="email" formControlName="email" autocomplete="email" placeholder="nome@sofipe.com.br" />
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <span class="hint-error">Informe um e-mail válido.</span>
+        }
+      </label>
+
+      <label class="field">
+        Senha
+        <input type="password" formControlName="password" autocomplete="current-password" />
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <span class="hint-error">Informe a senha.</span>
+        }
+      </label>
+
+      <button type="submit" class="btn btn-primary" [disabled]="loading()">
+        {{ loading() ? 'Entrando…' : 'Entrar' }}
+      </button>
+
+      <p class="muted small">Sessão válida por 8 horas.</p>
+    </form>
+  </section>
+</div>

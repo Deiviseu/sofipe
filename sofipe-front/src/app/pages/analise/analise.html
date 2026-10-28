@@ -1,0 +1,108 @@
+<div class="page">
+  <a routerLink="/painel" class="back">← Voltar ao painel</a>
+
+  @if (loading()) {
+    <p class="muted">Carregando…</p>
+  } @else if (company(); as c) {
+    <header class="head">
+      <div>
+        <h1>{{ c.tradeName || c.legalName }}</h1>
+        <p class="muted">
+          {{ c.taxId }} · {{ c.industryCodeDescription }} · {{ c.companySize }} · {{ c.city }}/{{ c.state }}
+        </p>
+      </div>
+      <button type="button" class="btn btn-outline" disabled title="Integração com CRM ainda não implementada">
+        Enviar ao CRM
+      </button>
+    </header>
+
+    @if (error()) {
+      <div class="alert" role="alert">{{ error() }}</div>
+    }
+
+    <section class="panel ask">
+      <label class="field">
+        Interesse do cliente
+        <textarea rows="2" [(ngModel)]="interest" placeholder="O que a empresa busca?"></textarea>
+      </label>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="run()"
+        [disabled]="analyzing() || !interest.trim()"
+      >
+        {{ analyzing() ? 'Analisando…' : analysis() ? 'Reanalisar' : 'Qualificar com IA' }}
+      </button>
+    </section>
+
+    @if (analyzing() && !analysis()) {
+      <div class="card loading" role="status">O agente está analisando a empresa. Isso pode levar alguns segundos…</div>
+    }
+
+    @if (analysis(); as a) {
+      <div class="row">
+        <section class="card score">
+          <h2 class="eyebrow">Prioridade do lead</h2>
+          <svg width="170" height="170" viewBox="0 0 170 170" role="img" [attr.aria-label]="'Score ' + a.numericScore + ' de 100'">
+            <circle cx="85" cy="85" r="72" fill="none" stroke="#3A4249" stroke-width="14" />
+            <circle
+              cx="85" cy="85" r="72" fill="none" stroke="#FFBF00" stroke-width="14"
+              stroke-linecap="round" [attr.stroke-dasharray]="dash()" transform="rotate(-90 85 85)"
+            />
+            <text x="85" y="92" text-anchor="middle" fill="#fff" font-family="Open Sans, sans-serif" font-weight="700" font-size="42">{{ a.numericScore }}</text>
+            <text x="85" y="116" text-anchor="middle" fill="#A3A3A3" font-size="13">de 100</text>
+          </svg>
+          <span class="badge big" [class]="a.priorityScore">{{ label(a.priorityScore) }}</span>
+        </section>
+
+        <section class="card why">
+          <h2 class="eyebrow">Por que essa nota</h2>
+          <p>{{ a.scoreJustification }}</p>
+          <div class="next">
+            <span>Próximo passo</span>
+            <strong>{{ a.nextStep }}</strong>
+          </div>
+        </section>
+      </div>
+
+      <div class="row">
+        <section class="panel list">
+          <h2>Seguros recomendados</h2>
+          @for (p of a.recommendedProducts; track p) {
+            <div class="product">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFBF00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z" />
+              </svg>
+              {{ p }}
+            </div>
+          }
+        </section>
+        <section class="panel list">
+          <h2>Perguntas para o primeiro contato</h2>
+          <ol>
+            @for (q of a.sugestionQuestions; track q) {
+              <li>{{ q }}</li>
+            }
+          </ol>
+        </section>
+      </div>
+
+      <section class="panel approach">
+        <div>
+          <h2>Abordagem</h2>
+          <p class="muted">Mensagem pronta gerada a partir da análise.</p>
+        </div>
+        <div class="btns">
+          <button type="button" class="btn btn-outline" (click)="copy()">
+            {{ copied() ? 'Copiado!' : 'Copiar mensagem' }}
+          </button>
+          <a class="btn btn-blue" [href]="whatsappLink()" target="_blank" rel="noopener">Abrir no WhatsApp</a>
+        </div>
+      </section>
+
+      <p class="muted small">Analisado em {{ a.analyzedAt | date: 'dd/MM/yyyy HH:mm' }}</p>
+    }
+  } @else {
+    <div class="alert" role="alert">{{ error() }}</div>
+  }
+</div>

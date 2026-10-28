@@ -1,0 +1,80 @@
+<form class="page" [formGroup]="form" (ngSubmit)="save()" novalidate>
+  <header>
+    <h1>Nova empresa</h1>
+    <p class="muted">
+      Digite o CNPJ para preencher os dados automaticamente, depois revise e envie para análise.
+    </p>
+  </header>
+
+  @if (error()) {
+    <div class="alert" role="alert">{{ error() }}</div>
+  }
+  @if (info()) {
+    <div class="info" role="status">{{ info() }}</div>
+  }
+
+  <section class="card cnpj">
+    <label class="field grow">
+      CNPJ (só números)
+      <input
+        type="text"
+        inputmode="numeric"
+        [value]="form.controls.taxId.value"
+        (input)="onCnpjInput($any($event.target).value)"
+        (blur)="form.controls.taxId.markAsTouched()"
+        placeholder="00000000000000"
+      />
+      @if (invalid('taxId')) {
+        <span class="hint-error">O CNPJ precisa ter 14 dígitos.</span>
+      }
+    </label>
+    <button type="button" class="btn btn-outline accent" (click)="lookup()" [disabled]="lookingUp()">
+      {{ lookingUp() ? 'Buscando…' : 'Buscar dados públicos' }}
+    </button>
+  </section>
+
+  <section class="panel group">
+    <h2>Dados cadastrais</h2>
+    <div class="grid">
+      @for (f of dadosFields; track f.key) {
+        <label class="field">
+          {{ f.label }}
+          <input [type]="f.type ?? 'text'" [formControlName]="f.key" />
+          @if (invalid(f.key)) {
+            <span class="hint-error">Campo obrigatório ou inválido.</span>
+          }
+        </label>
+      }
+    </div>
+
+    <h2>Endereço</h2>
+    <div class="grid">
+      @for (f of enderecoFields; track f.key) {
+        <label class="field">
+          {{ f.label }}
+          <input type="text" [formControlName]="f.key" />
+        </label>
+      }
+    </div>
+
+    <h2>Interesse do cliente</h2>
+    <label class="field">
+      O que a empresa busca (vai para o agente de IA)
+      <textarea
+        rows="3"
+        [formControl]="interest"
+        placeholder="Ex.: proteção do galpão e dos equipamentos; avaliar responsabilidade civil."
+      ></textarea>
+      @if (interest.touched && interest.invalid) {
+        <span class="hint-error">Descreva o interesse para a IA conseguir qualificar.</span>
+      }
+    </label>
+  </section>
+
+  <div class="actions">
+    <a routerLink="/painel" class="btn btn-outline">Cancelar</a>
+    <button type="submit" class="btn btn-primary" [disabled]="saving()">
+      {{ saving() ? 'Salvando…' : 'Salvar e qualificar com IA' }}
+    </button>
+  </div>
+</form>
