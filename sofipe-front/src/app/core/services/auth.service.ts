@@ -44,8 +44,10 @@ export class AuthService {
     this.router.navigateByUrl('/login');
   }
 
+  /** Token sem prefixo — evita mandar "Bearer Bearer ..." se a API já devolver com prefixo. */
   get token(): string | null {
-    return this.session()?.token ?? null;
+    const raw = this.session()?.token?.trim();
+    return raw ? raw.replace(/^Bearer\s+/i, '') : null;
   }
 
   private restore(): LoginResponse | null {
@@ -53,7 +55,7 @@ export class AuthService {
       const raw = sessionStorage.getItem(STORAGE_KEY);
       if (!raw) return null;
       const data = JSON.parse(raw) as LoginResponse;
-      return this.isExpired(data.token) ? null : data;
+      return this.isExpired(data.token.replace(/^Bearer\s+/i, '')) ? null : data;
     } catch {
       return null;
     }
